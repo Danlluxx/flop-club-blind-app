@@ -1,0 +1,162 @@
+export type BlindLevel = {
+  type?: "level" | "break";
+  level: number;
+  smallBlind: number;
+  bigBlind: number;
+  bigBlindAnte: number;
+  minutes: number;
+  label?: string;
+  note?: string;
+};
+
+export type BlindStructure = {
+  id: string;
+  name: string;
+  levels: BlindLevel[];
+};
+
+type BlindLevelInput = [number, number, number, number, number] | BlindLevel;
+
+const shortBreak: BlindLevel = {
+  type: "break",
+  level: 0,
+  smallBlind: 0,
+  bigBlind: 0,
+  bigBlindAnte: 0,
+  minutes: 10,
+  label: "ПЕРЕРЫВ 10 МИНУТ",
+};
+
+const lateRegistrationBreak: BlindLevel = {
+  type: "break",
+  level: 0,
+  smallBlind: 0,
+  bigBlind: 0,
+  bigBlindAnte: 0,
+  minutes: 15,
+  label: "ПЕРЕРЫВ 15 МИНУТ",
+  note: "ЗАКРЫТИЕ ПОЗДНЕЙ РЕГИСТРАЦИИ",
+};
+
+function mapBlindLevels(items: BlindLevelInput[]): BlindLevel[] {
+  return items.map((item) =>
+    Array.isArray(item)
+      ? {
+          level: item[0],
+          smallBlind: item[1],
+          bigBlind: item[2],
+          bigBlindAnte: item[3],
+          minutes: item[4],
+        }
+      : item,
+  );
+}
+
+const turboLevels = mapBlindLevels([
+  [1, 100, 100, 100, 12],
+  [2, 100, 200, 200, 12],
+  [3, 200, 400, 400, 12],
+  [4, 300, 600, 600, 12],
+  [5, 500, 1000, 1000, 12],
+  shortBreak,
+  [6, 800, 1600, 1600, 12],
+  [7, 1000, 2000, 2000, 12],
+  [8, 1500, 3000, 3000, 12],
+  [9, 2000, 4000, 4000, 12],
+  [10, 3000, 6000, 6000, 12],
+  lateRegistrationBreak,
+  [11, 4000, 8000, 8000, 12],
+  [12, 5000, 10000, 10000, 12],
+  [13, 8000, 16000, 16000, 12],
+  [14, 10000, 20000, 20000, 12],
+  [15, 15000, 30000, 30000, 12],
+  shortBreak,
+  [16, 20000, 40000, 40000, 12],
+  [17, 30000, 60000, 60000, 12],
+  [18, 50000, 100000, 100000, 12],
+  [19, 75000, 150000, 150000, 12],
+  [20, 100000, 200000, 200000, 12],
+]);
+
+const deepLevels = mapBlindLevels([
+  [1, 100, 100, 100, 15],
+  [2, 100, 200, 200, 15],
+  [3, 100, 300, 300, 15],
+  [4, 200, 400, 400, 15],
+  [5, 300, 500, 500, 15],
+  shortBreak,
+  [6, 300, 600, 600, 15],
+  [7, 400, 800, 800, 15],
+  [8, 500, 1000, 1000, 15],
+  [9, 600, 1200, 1200, 15],
+  [10, 800, 1600, 1600, 15],
+  lateRegistrationBreak,
+  [11, 1000, 2000, 2000, 15],
+  [12, 1500, 3000, 3000, 15],
+  [13, 2000, 4000, 4000, 15],
+  [14, 2500, 5000, 5000, 15],
+  [15, 3000, 6000, 6000, 15],
+  shortBreak,
+  [16, 4000, 8000, 8000, 15],
+  [17, 5000, 10000, 10000, 15],
+  [18, 6000, 12000, 12000, 15],
+  [19, 8000, 16000, 16000, 15],
+  [20, 10000, 20000, 20000, 15],
+  [21, 15000, 30000, 30000, 15],
+  [22, 20000, 40000, 40000, 15],
+  [23, 30000, 60000, 60000, 15],
+  [24, 40000, 80000, 80000, 15],
+  [25, 50000, 100000, 100000, 15],
+  [26, 75000, 150000, 150000, 15],
+  [27, 100000, 200000, 200000, 15],
+  [28, 150000, 300000, 300000, 15],
+]);
+
+const butterflyLevels = mapBlindLevels([
+  [1, 100, 100, 100, 15],
+  [2, 100, 200, 200, 15],
+  [3, 200, 300, 300, 15],
+  [4, 200, 400, 400, 15],
+  [5, 300, 600, 600, 15],
+  shortBreak,
+  [6, 400, 800, 800, 15],
+  [7, 500, 1000, 1000, 15],
+  [8, 600, 1200, 1200, 15],
+  [9, 800, 1600, 1600, 12],
+  [10, 1000, 2000, 2000, 12],
+  lateRegistrationBreak,
+  [11, 1200, 2400, 2400, 12],
+  [12, 1500, 3000, 3000, 12],
+  [13, 2000, 4000, 4000, 12],
+  [14, 2500, 5000, 5000, 12],
+  [15, 3000, 6000, 6000, 12],
+  shortBreak,
+  [16, 4000, 8000, 8000, 12],
+  [17, 5000, 10000, 10000, 12],
+  [18, 6000, 12000, 12000, 12],
+  [19, 8000, 16000, 16000, 12],
+  [20, 10000, 20000, 20000, 12],
+  [21, 12000, 24000, 24000, 12],
+  [22, 15000, 30000, 30000, 12],
+  [23, 20000, 40000, 40000, 12],
+  [24, 25000, 50000, 50000, 12],
+  [25, 30000, 60000, 60000, 12],
+]);
+
+export const blindStructures: BlindStructure[] = [
+  {
+    id: "turbo",
+    name: "Turbo / Last Call / Rampage",
+    levels: turboLevels,
+  },
+  {
+    id: "deep",
+    name: "Deep / Special / Prime Event / Black Edition",
+    levels: deepLevels,
+  },
+  {
+    id: "flop-butterfly",
+    name: "FLOP BUTTERFLY 🦋",
+    levels: butterflyLevels,
+  },
+];
