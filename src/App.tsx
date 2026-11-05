@@ -24,6 +24,8 @@ type TournamentState = {
 
 type ParticipantsState = {
   count: number | null;
+  entries: number | null;
+  bonusChips: number;
   capacity: number;
   tournamentTitle: string | null;
   updatedAt: number | null;
@@ -221,6 +223,8 @@ export default function App() {
   const [settings, setSettings] = useState<AudioSettings>(readStoredSettings);
   const [participants, setParticipants] = useState<ParticipantsState>({
     count: null,
+    entries: null,
+    bonusChips: 0,
     capacity: 50,
     tournamentTitle: null,
     updatedAt: null,
@@ -423,9 +427,9 @@ export default function App() {
     [levelIndex, secondsLeft, structure.levels],
   );
 
-  const entries = participants.count;
-  const playersLeft = entries;
-  const totalChips = entries !== null ? entries * table.startingStack : null;
+  const playersLeft = participants.count;
+  const entries = participants.entries ?? playersLeft;
+  const totalChips = entries !== null ? entries * table.startingStack + participants.bonusChips : null;
   const averageStack =
     totalChips !== null && playersLeft ? Math.round(totalChips / playersLeft) : null;
   const averageBlinds =
@@ -468,8 +472,12 @@ export default function App() {
 
         const count = Number(payload?.count);
         const capacity = Number(payload?.capacity);
+        const entries = Number(payload?.entries);
+        const bonusChips = Number(payload?.bonusChips);
         setParticipants({
           count: Number.isInteger(count) && count >= 0 ? count : null,
+          entries: payload?.entries != null && Number.isInteger(entries) && entries >= 0 ? entries : null,
+          bonusChips: Number.isInteger(bonusChips) && bonusChips > 0 ? bonusChips : 0,
           capacity: Number.isInteger(capacity) && capacity > 0 ? capacity : 50,
           tournamentTitle: typeof payload?.tournamentTitle === "string" ? payload.tournamentTitle : null,
           updatedAt: Number(payload?.updatedAt) || Date.now(),
@@ -601,7 +609,7 @@ export default function App() {
               <small> / {participants.capacity}</small>
             </strong>
             <div className="bar" aria-hidden="true">
-              <i style={{ width: `${Math.min(((entries ?? 0) / participants.capacity) * 100, 100)}%` }} />
+              <i style={{ width: `${Math.min(((playersLeft ?? 0) / participants.capacity) * 100, 100)}%` }} />
             </div>
           </div>
 

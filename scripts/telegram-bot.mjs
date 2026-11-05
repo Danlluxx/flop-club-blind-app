@@ -29,6 +29,8 @@ let lastState = null;
 let lastStateLogged = false;
 let participantsCache = {
   count: null,
+  entries: null,
+  bonusChips: 0,
   capacity: 50,
   tournamentId: null,
   tournamentTitle: null,
@@ -326,6 +328,8 @@ async function refreshParticipants() {
       const participants = await fetchFlopClubTgParticipantsUrl();
       participantsCache = {
         count: getParticipantCount(participants),
+        entries: Number.isInteger(participants?.entries) ? participants.entries : null,
+        bonusChips: Number.isInteger(participants?.bonusChips) ? participants.bonusChips : 0,
         capacity: getParticipantCapacity(participants),
         tournamentId: participants?.tournamentId ?? null,
         tournamentTitle: participants?.tournamentTitle ?? null,
@@ -667,6 +671,8 @@ const server = http.createServer(async (request, response) => {
     sendJson(response, 200, {
       ok: !participants.error,
       count: participants.count,
+      entries: participants.entries,
+      bonusChips: participants.bonusChips,
       capacity: participants.capacity,
       tournamentId: participants.tournamentId,
       tournamentTitle: participants.tournamentTitle,
