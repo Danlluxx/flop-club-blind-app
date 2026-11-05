@@ -26,6 +26,7 @@ type ParticipantsState = {
   count: number | null;
   entries: number | null;
   bonusChips: number;
+  earlyBirdCount: number;
   capacity: number;
   tournamentTitle: string | null;
   updatedAt: number | null;
@@ -225,6 +226,7 @@ export default function App() {
     count: null,
     entries: null,
     bonusChips: 0,
+    earlyBirdCount: 0,
     capacity: 50,
     tournamentTitle: null,
     updatedAt: null,
@@ -474,10 +476,12 @@ export default function App() {
         const capacity = Number(payload?.capacity);
         const entries = Number(payload?.entries);
         const bonusChips = Number(payload?.bonusChips);
+        const earlyBirdCount = Number(payload?.earlyBirdCount);
         setParticipants({
           count: Number.isInteger(count) && count >= 0 ? count : null,
           entries: payload?.entries != null && Number.isInteger(entries) && entries >= 0 ? entries : null,
           bonusChips: Number.isInteger(bonusChips) && bonusChips > 0 ? bonusChips : 0,
+          earlyBirdCount: Number.isInteger(earlyBirdCount) && earlyBirdCount > 0 ? earlyBirdCount : 0,
           capacity: Number.isInteger(capacity) && capacity > 0 ? capacity : 50,
           tournamentTitle: typeof payload?.tournamentTitle === "string" ? payload.tournamentTitle : null,
           updatedAt: Number(payload?.updatedAt) || Date.now(),
@@ -601,6 +605,9 @@ export default function App() {
           <div className="stat stat-chips">
             <span className="stat-label">Фишек в игре</span>
             <strong>{totalChips !== null ? formatChips(totalChips) : "—"}</strong>
+            {participants.earlyBirdCount > 0 && (
+              <span className="stat-note">+10K до 19:10 · {participants.earlyBirdCount} игр.</span>
+            )}
           </div>
           <div className="stat stat-players">
             <span className="stat-label">Игроки</span>
