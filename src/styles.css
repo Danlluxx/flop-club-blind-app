@@ -789,10 +789,16 @@ input {
   position: absolute;
   top: -12%;
   left: var(--x);
-  color: var(--c, #ff3b5c);
-  font-size: var(--s);
+  width: var(--s);
+  aspect-ratio: 1388 / 1133;
+  background: var(--mark) center / contain no-repeat;
   opacity: 0.12;
   animation: fall var(--d) linear var(--delay) infinite;
+}
+
+.suit-field span.is-grey,
+.suit-rain span.is-grey {
+  filter: grayscale(1) brightness(0.7);
 }
 
 .suit-rain {

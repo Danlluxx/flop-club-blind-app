@@ -51,17 +51,18 @@ const defaultTable: TableSettings = {
   startingStack: 30000,
 };
 
-const SUITS = ["♠", "♥", "♦", "♣"];
+// Falling Flop Club marks, alternating red and grey.
+const markClass = (index: number) => (index % 4 === 1 || index % 4 === 2 ? "mark is-red" : "mark is-grey");
 
-// Deterministic spread so the suits do not jump between renders.
+// Deterministic spread so the marks do not jump between renders.
 const suitStyle = (index: number, total: number, size: [number, number], duration: [number, number]) =>
   ({
+    "--mark": `url(${APP_BASE_URL}images/flop-mark.png)`,
     "--x": `${((index + 0.5) / total) * 100}%`,
     "--s": `${size[0] + ((index * 37) % 10) * ((size[1] - size[0]) / 10)}em`,
     "--d": `${duration[0] + ((index * 53) % 10) * ((duration[1] - duration[0]) / 10)}s`,
     "--delay": `${-((index * 29) % 17)}s`,
     "--r": `${index % 2 ? "" : "-"}${240 + ((index * 71) % 240)}deg`,
-    "--c": index % 4 === 1 || index % 4 === 2 ? "#ff3b5c" : "#ffffff",
   }) as React.CSSProperties;
 
 const defaultSettings: AudioSettings = {
@@ -559,7 +560,7 @@ export default function App() {
 
       <div className="suit-field" aria-hidden="true">
         {Array.from({ length: 14 }, (_, index) => (
-          <span key={index} style={suitStyle(index, 14, [3, 7], [22, 38])}>{SUITS[index % 4]}</span>
+          <span key={index} className={markClass(index)} style={suitStyle(index, 14, [3, 7], [22, 38])} />
         ))}
       </div>
 
@@ -568,7 +569,7 @@ export default function App() {
           <div className="level-up-alert">{levelUpText}</div>
           <div className="suit-rain" aria-hidden="true">
             {Array.from({ length: 36 }, (_, index) => (
-              <span key={index} style={suitStyle(index, 36, [3, 6], [2.2, 4])}>{SUITS[index % 4]}</span>
+              <span key={index} className={markClass(index)} style={suitStyle(index, 36, [3, 6], [2.2, 4])} />
             ))}
           </div>
         </>
