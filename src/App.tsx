@@ -615,7 +615,7 @@ export default function App() {
 
           <div className="center-stack">
             <span className="wall-clock">
-              {now.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+              {now.toLocaleTimeString("ru-RU", { timeZone: "Asia/Barnaul", hour: "2-digit", minute: "2-digit", second: "2-digit" })}
             </span>
             <div
               className={`timer${isRunning && secondsLeft <= 60 ? " is-urgent" : ""}${isRunning && secondsLeft <= 10 ? " is-final" : ""}`}
