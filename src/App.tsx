@@ -580,7 +580,6 @@ export default function App() {
             <img src={`${APP_BASE_URL}images/flop-wordmark.svg`} alt="FLOP CLUB" />
           </div>
           <div className="title-block">
-            <span className="eyebrow">FLOP CLUB / BARNAUL</span>
             <h1 className="event-title" title={participants.tournamentTitle ?? undefined}>
               {participants.tournamentTitle ?? tournamentTitleFallback(participants)}
             </h1>
@@ -716,10 +715,6 @@ export default function App() {
           <div className="foot-item">
             <span>Время турнира</span>
             <strong>{formatLongTimer(elapsedSeconds)}</strong>
-          </div>
-          <div className="foot-item">
-            <span>Структура</span>
-            <strong>{structure.name}</strong>
           </div>
           <div className="foot-item">
             <span>Уровней</span>

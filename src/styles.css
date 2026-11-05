@@ -411,10 +411,11 @@ input {
 }
 
 .footbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 4em;
-  margin: 0 8em 0 0;
+  /* same width as the table outline, which is inset 2% inside its box */
+  margin: 0 2%;
   padding: 0 3em;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -438,16 +439,16 @@ input {
   font-weight: 800;
 }
 
-.foot-item:nth-child(2) {
-  flex: 1;
-  min-width: 0;
+.foot-item:nth-child(1) {
+  grid-column: 2;
+  justify-items: center;
+  text-align: center;
 }
 
-.foot-item:nth-child(2) strong {
-  overflow: hidden;
-  font-size: 1.7em;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.foot-item:nth-child(2) {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
 }
 
 .level-up-alert {
