@@ -128,6 +128,14 @@ function tournamentTitleFallback(participants: ParticipantsState) {
   return "Турнир не выбран";
 }
 
+function toggleFullscreen() {
+  if (document.fullscreenElement) {
+    void document.exitFullscreen();
+  } else {
+    void document.documentElement.requestFullscreen?.().catch(() => undefined);
+  }
+}
+
 function formatClock(date: Date) {
   return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
 }
@@ -411,6 +419,7 @@ export default function App() {
       if (event.key === "ArrowLeft") previousLevelAction();
       if (event.key.toLowerCase() === "r") resetClock();
       if (event.key.toLowerCase() === "h") setShowControls((value) => !value);
+      if (event.key.toLowerCase() === "f" || event.key.toLowerCase() === "а") toggleFullscreen();
     };
 
     window.addEventListener("keydown", onKeyDown);
@@ -739,6 +748,10 @@ export default function App() {
             {isRunning ? "❚❚  Пауза" : secondsLeft === levelSeconds(currentLevel) && levelIndex === 0 ? "▶  Старт" : "▶  Продолжить"}
           </button>
 
+          <button type="button" className="cp-fullscreen" onClick={toggleFullscreen}>
+            ⛶ На весь экран
+          </button>
+
           <div className="cp-pair">
             <div className="cp-card">
               <span className="cp-label">{isBreakLevel(currentLevel) ? "Перерыв" : "Уровень"}</span>
@@ -824,7 +837,7 @@ export default function App() {
               {confirmReset ? "Точно? Нажмите ещё раз" : "Сбросить турнир"}
             </button>
 
-            <p className="cp-keys">Пробел — пауза · ← → — уровень · H — меню</p>
+            <p className="cp-keys">Пробел — пауза · ← → — уровень · F — весь экран · H — меню</p>
           </details>
         </aside>
       )}
