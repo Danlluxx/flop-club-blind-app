@@ -524,21 +524,30 @@ export default function App() {
     };
   }, []);
 
-  // The app knows each tournament's starting stack and blind structure: apply them once per tournament, so a
-  // manual change made afterwards on this screen sticks. The structure only switches while the clock is untouched.
-  const appliedTournamentRef = useRef<string | null>(null);
+  // The app knows each tournament's starting stack and blind structure. The stack is applied once per tournament,
+  // so a manual change afterwards sticks. The structure resets the timer, so it switches only while the clock is
+  // untouched (not running, level 1, full time) and is retried until then.
+  const appliedStackRef = useRef<string | null>(null);
+  const appliedStructureRef = useRef<string | null>(null);
   useEffect(() => {
-    if (!participants.tournamentId || appliedTournamentRef.current === participants.tournamentId) return;
-    const hintedStructure = participants.blindStructure ? blindStructures.find((item) => item.id === participants.blindStructure) : null;
-    const clockUntouched = !isRunning && levelIndex === 0 && secondsLeft === levelSeconds(currentLevel);
-    if (hintedStructure && !clockUntouched && hintedStructure.id !== structureId) return;
-    appliedTournamentRef.current = participants.tournamentId;
+    const tournamentId = participants.tournamentId;
+    if (!tournamentId) return;
     const stack = participants.startingStack;
-    if (stack) setTable((value) => (value.startingStack === stack ? value : { ...value, startingStack: stack }));
-    if (hintedStructure && hintedStructure.id !== structureId) {
-      setStructureId(hintedStructure.id);
-      setSecondsLeft(levelSeconds(hintedStructure.levels[0]));
+    if (stack && appliedStackRef.current !== tournamentId) {
+      appliedStackRef.current = tournamentId;
+      setTable((value) => (value.startingStack === stack ? value : { ...value, startingStack: stack }));
     }
+    const hintedStructure = participants.blindStructure ? blindStructures.find((item) => item.id === participants.blindStructure) : null;
+    if (!hintedStructure || appliedStructureRef.current === tournamentId) return;
+    if (hintedStructure.id === structureId) {
+      appliedStructureRef.current = tournamentId;
+      return;
+    }
+    const clockUntouched = !isRunning && levelIndex === 0 && secondsLeft === levelSeconds(currentLevel);
+    if (!clockUntouched) return;
+    appliedStructureRef.current = tournamentId;
+    setStructureId(hintedStructure.id);
+    setSecondsLeft(levelSeconds(hintedStructure.levels[0]));
   }, [participants.tournamentId, participants.startingStack, participants.blindStructure, isRunning, levelIndex, secondsLeft, currentLevel, structureId]);
 
   useEffect(() => {
