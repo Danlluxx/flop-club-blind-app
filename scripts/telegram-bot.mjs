@@ -333,6 +333,9 @@ async function refreshParticipants() {
         capacity: getParticipantCapacity(participants),
         tournamentId: participants?.tournamentId ?? null,
         tournamentTitle: participants?.tournamentTitle ?? null,
+        earlyBirdCount: Number.isInteger(participants?.earlyBirdCount) ? participants.earlyBirdCount : 0,
+        startingStack: Number.isInteger(participants?.startingStack) ? participants.startingStack : null,
+        blindStructure: typeof participants?.blindStructure === "string" ? participants.blindStructure : null,
         updatedAt: Date.now(),
         error: null,
       };

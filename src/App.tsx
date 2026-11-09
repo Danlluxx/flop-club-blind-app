@@ -29,6 +29,9 @@ type ParticipantsState = {
   earlyBirdCount: number;
   capacity: number;
   tournamentTitle: string | null;
+  tournamentId: string | null;
+  startingStack: number | null;
+  blindStructure: string | null;
   updatedAt: number | null;
   error: string | null;
 };
@@ -238,6 +241,9 @@ export default function App() {
     earlyBirdCount: 0,
     capacity: 50,
     tournamentTitle: null,
+    tournamentId: null,
+    startingStack: null,
+    blindStructure: null,
     updatedAt: null,
     error: null,
   });
@@ -494,6 +500,9 @@ export default function App() {
           earlyBirdCount: Number.isInteger(earlyBirdCount) && earlyBirdCount > 0 ? earlyBirdCount : 0,
           capacity: Number.isInteger(capacity) && capacity > 0 ? capacity : 50,
           tournamentTitle: typeof payload?.tournamentTitle === "string" ? payload.tournamentTitle : null,
+          tournamentId: typeof payload?.tournamentId === "string" ? payload.tournamentId : null,
+          startingStack: Number.isInteger(payload?.startingStack) && payload.startingStack > 0 ? payload.startingStack : null,
+          blindStructure: typeof payload?.blindStructure === "string" ? payload.blindStructure : null,
           updatedAt: Number(payload?.updatedAt) || Date.now(),
           error: typeof payload?.error === "string" ? payload.error : null,
         });
@@ -514,6 +523,23 @@ export default function App() {
       window.clearInterval(intervalId);
     };
   }, []);
+
+  // The app knows each tournament's starting stack and blind structure: apply them once per tournament, so a
+  // manual change made afterwards on this screen sticks. The structure only switches while the clock is untouched.
+  const appliedTournamentRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!participants.tournamentId || appliedTournamentRef.current === participants.tournamentId) return;
+    const hintedStructure = participants.blindStructure ? blindStructures.find((item) => item.id === participants.blindStructure) : null;
+    const clockUntouched = !isRunning && levelIndex === 0 && secondsLeft === levelSeconds(currentLevel);
+    if (hintedStructure && !clockUntouched && hintedStructure.id !== structureId) return;
+    appliedTournamentRef.current = participants.tournamentId;
+    const stack = participants.startingStack;
+    if (stack) setTable((value) => (value.startingStack === stack ? value : { ...value, startingStack: stack }));
+    if (hintedStructure && hintedStructure.id !== structureId) {
+      setStructureId(hintedStructure.id);
+      setSecondsLeft(levelSeconds(hintedStructure.levels[0]));
+    }
+  }, [participants.tournamentId, participants.startingStack, participants.blindStructure, isRunning, levelIndex, secondsLeft, currentLevel, structureId]);
 
   useEffect(() => {
     const controller = new AbortController();
