@@ -676,9 +676,12 @@ const server = http.createServer(async (request, response) => {
       count: participants.count,
       entries: participants.entries,
       bonusChips: participants.bonusChips,
+      earlyBirdCount: participants.earlyBirdCount ?? 0,
       capacity: participants.capacity,
       tournamentId: participants.tournamentId,
       tournamentTitle: participants.tournamentTitle,
+      startingStack: participants.startingStack ?? null,
+      blindStructure: participants.blindStructure ?? null,
       updatedAt: participants.updatedAt,
       error: participants.error,
     });
